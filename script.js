@@ -2,7 +2,7 @@
 function calculateAddress() {
     // Collect data from input fields above the table
     var virtualIndex = document.getElementById('virtualIndexInput').value;
-    var addressType = document.getElementById('addressTypeDropdown').value;
+  //  var addressType = document.getElementById('addressTypeDropdown').value;
     var physicalAddress = document.getElementById('physicalAddressInput').value;
     var virtualPagesize = Math.log2(virtualIndex/physicalAddress);
     var physicalPagesize = Math.log2(virtualIndex/(2*physicalAddress));
@@ -38,7 +38,7 @@ function calculateAddress() {
 
     var inputData = {
         virtualIndex: virtualIndex,
-        addressType: addressType,
+       // addressType: addressType,
         physicalAddress: physicalAddress
     };
 
@@ -91,7 +91,13 @@ function calculateAddress() {
     }
 
     document.getElementById('resultingAddressLabel').innerText = resultingAddress;
-    resultContainer.classList.add('show');
+    if(resultingAddress.length > 10){
+        resultContainer.classList.add('show-red');
+    }
+    else{
+        resultContainer.classList.add('show-green');
+    }
+    
 }
 function hexToBinary(hexValue) {
     // Define a map for converting hexadecimal digits to binary
@@ -196,12 +202,17 @@ function generateAddressTable() {
 
     // Reference to the table body
     var tableBody = document.querySelector("tbody");
+    var tcaption = document.getElementById("caption");
+    var theading = document.getElementById("attributes");
 
     // Clear existing rows
     tableBody.innerHTML = "";
+    tcaption.classList.add('d-none');
+    theading.classList.add('d-none');
 
-    if(pageSize){
-        var theading = document.getElementById("attributes");
+    if(pageSize > 0 && virtualIndexSize > 0){
+        
+        tcaption.classList.remove('d-none');
         theading.classList.remove('d-none');
     }
 

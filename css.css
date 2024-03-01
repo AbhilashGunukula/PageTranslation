@@ -93,12 +93,20 @@ tfoot td {
   transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out;
 }
 
-#resultContainer.show {
+#resultContainer.show-green {
   /* Set opacity to 1 when the show class is applied */
   opacity: 1;
   /* Add a background color for highlighting */
   background-color: #dff0d8; /* Change this color as desired */
-  color: #3c763d; /* Change this color as desired */
+  color: #25c328; /* Change this color as desired */
+}
+
+#resultContainer.show-red {
+  /* Set opacity to 1 when the show class is applied */
+  opacity: 1;
+  /* Add a background color for highlighting */
+  background-color: #f0d8e7; /* Change this color as desired */
+  color: #c22c2c; /* Change this color as desired */
 }
 
 /* Additional style to make the text selectable */

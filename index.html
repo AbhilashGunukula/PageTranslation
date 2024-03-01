@@ -10,13 +10,13 @@
 </head>
 <body>
 
-<div class="topSelectors">
+<!--<div class="topSelectors">
     <label for="addressTypeDropdown">Select Address Type:</label>
     <select id="addressTypeDropdown">
         <option>Physical Address</option>
         <option>Virtual Address</option>
     </select>
-</div>
+</div>-->
 
 <div class="topSelectors">
     <label for="virtualIndexInput">Virtual Space:</label>
@@ -28,7 +28,7 @@
     <input type="number" id="physicalAddressInput" min="0" max="15">
 </div>
 <table>
-    <caption>Address Data</caption>
+    <caption id = "caption" class="d-none">Address Data</caption>
     <thead id = "attributes" class="d-none">
     <tr>
         <th scope="col">Virtual Index</th>

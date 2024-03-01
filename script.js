@@ -91,6 +91,7 @@ function calculateAddress() {
     }
 
     document.getElementById('resultingAddressLabel').innerText = resultingAddress;
+    resultContainer.classList.add('show');
 }
 function hexToBinary(hexValue) {
     // Define a map for converting hexadecimal digits to binary
@@ -191,11 +192,20 @@ function generateAddressTable() {
     var pageSize = parseInt(document.getElementById("physicalAddressInput").value);
     var physicalAddressMaxLength = Math.log2(virtualIndexSize/(2*pageSize));
 
+    
+
     // Reference to the table body
     var tableBody = document.querySelector("tbody");
 
     // Clear existing rows
     tableBody.innerHTML = "";
+
+    if(pageSize){
+        var theading = document.getElementById("attributes");
+        theading.classList.remove('d-none');
+    }
+
+    
 
     // Generate new rows based on input values
     for (var i = 0; i < (virtualIndexSize / pageSize); i++) {
@@ -232,6 +242,7 @@ function generateAddressTable() {
         // Append the row to the table body
         tableBody.appendChild(newRow);
     }
+    
 }
 
 // Function to toggle address input based on checkbox selection
@@ -271,7 +282,7 @@ function toggleAddressInput(addressType) {
                 virtualAddressInputBox.innerHTML = '<label for="virtualAddressInput">Enter Virtual Address:</label><input type="text" id="virtualAddressInput">';
                 
                 // Append input box to the container
-                document.getElementById("addressInputContainer").appendChild(virtualAddressInputBox);
+                document.getElementById("physical").appendChild(virtualAddressInputBox);
             }
             if (physicalAddressInputBox) {
                 physicalAddressInputBox.parentNode.removeChild(physicalAddressInputBox);
@@ -293,7 +304,7 @@ function toggleAddressInput(addressType) {
                 physicalAddressInputBox.innerHTML = '<label for="physicalAddressInputs">Enter Physical Address:</label><input type="text" id="physicalAddressInputs">';
                 
                 // Append input box to the container
-                document.getElementById("addressInputContainer").appendChild(physicalAddressInputBox);
+                document.getElementById("virtual").appendChild(physicalAddressInputBox);
             }
             if (virtualAddressInputBox) {
                 virtualAddressInputBox.parentNode.removeChild(virtualAddressInputBox);

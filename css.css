@@ -1,61 +1,108 @@
 *, *:before, *:after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Nunito', sans-serif;
-    color: #384047;
-    /* background-color: #cce6f9; */
-    margin: 10rem;
-  }
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  .topSelectors{
-    margin: 1rem;
-  }
+body {
+  font-family: 'Nunito', sans-serif;
+  color: #384047;
+  /* background-color: #cce6f9; */
+  margin: 10rem;
+}
+
+.topSelectors{
+  margin: 1rem;
+}
+
+table {
+  max-width: 960px;
+  margin: 10px auto;
+}
+
+caption {
+  font-size: 1.6em;
+  font-weight: 400;
+  padding: 10px 0;
+}
+
+thead th {
+  font-weight: 400;
+  background: #8a97a0;
+  color: #FFF;
+}
+
+tr {
+  background: #f4f7f8;
+  border-bottom: 1px solid #FFF;
+  margin-bottom: 5px;
+}
+
+tr:nth-child(even) {
+  background: #e8eeef;
+}
+caption{
+  width: max-content;
+}
+.d-none{
+  display: none;
+}
+
+th, td {
+  text-align: left;
+  padding: 5px;
+  font-weight: 300;
+}
+
+td input{
+  border: unset;
+  background: transparent;
+}
+
+td input:focus-visible {
+  border: none !important;
+  background: transparent !important;
+}
+
+
+tfoot tr {
+  background: none;
+}
+
+tfoot td {
+  padding: 10px 2px;
+  font-size: 0.8em;
+  font-style: italic;
+  color: #8a97a0;
+}
+
+
+/* Add this CSS in your existing stylesheet or create a new one */
+#resultContainer {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+
+  /* Set initial opacity to 0 */
+  opacity: 0;
   
-  table {
-    max-width: 960px;
-    margin: 10px auto;
-  }
-  
-  caption {
-    font-size: 1.6em;
-    font-weight: 400;
-    padding: 10px 0;
-  }
-  
-  thead th {
-    font-weight: 400;
-    background: #8a97a0;
-    color: #FFF;
-  }
-  
-  tr {
-    background: #f4f7f8;
-    border-bottom: 1px solid #FFF;
-    margin-bottom: 5px;
-  }
-  
-  tr:nth-child(even) {
-    background: #e8eeef;
-  }
-  
-  th, td {
-    text-align: left;
-    padding: 20px;
-    font-weight: 300;
-  }
-  
-  tfoot tr {
-    background: none;
-  }
-  
-  tfoot td {
-    padding: 10px 2px;
-    font-size: 0.8em;
-    font-style: italic;
-    color: #8a97a0;
-  }
-  
+  /* Apply transition for a smooth fade-in effect */
+  transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+
+#resultContainer.show {
+  /* Set opacity to 1 when the show class is applied */
+  opacity: 1;
+  /* Add a background color for highlighting */
+  background-color: #dff0d8; /* Change this color as desired */
+  color: #3c763d; /* Change this color as desired */
+}
+
+/* Additional style to make the text selectable */
+#resultContainer strong {
+  user-select: text;
+}
+

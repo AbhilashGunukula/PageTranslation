@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagination</title>
-    <link rel="stylesheet" href="normalize.css">
+    <!-- <link rel="stylesheet" href="normalize.css"> -->
     <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css.css">
 </head>
@@ -29,7 +29,7 @@
 </div>
 <table>
     <caption>Address Data</caption>
-    <thead>
+    <thead id = "attributes" class="d-none">
     <tr>
         <th scope="col">Virtual Index</th>
         <th scope="col">Physical Index</th>
@@ -44,20 +44,21 @@
 <div id="addressInputContainer"></div> <!-- Container for dynamically generated input boxes -->
 
 <div>
-    <div class="topSelectors">
+    <div class="topSelectors" id="physical">
         <label>
             <input type="checkbox" id="calculatePhysicalAddress" onchange="toggleAddressInput('physical')"> Calculate Physical Address
         </label>
     </div>
     
-    <div class="topSelectors">
+    <div class="topSelectors" id="virtual">
         <label>
             <input type="checkbox" id="calculateVirtualAddress" onchange="toggleAddressInput('virtual')"> Calculate Virtual Address
         </label>
     </div>
     
     <button onclick="calculateAddress()">Calculate Address</button>
-    <p id="resultingAddressLabel"></p>
+    <div id="resultContainer"><strong id="resultingAddressLabel"></strong></div>
+    
 </div>
 
 <script src="script.js"></script>

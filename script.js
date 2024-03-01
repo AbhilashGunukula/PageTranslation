@@ -4,6 +4,8 @@ function calculateAddress() {
     var virtualIndex = document.getElementById('virtualIndexInput').value;
     var addressType = document.getElementById('addressTypeDropdown').value;
     var physicalAddress = document.getElementById('physicalAddressInput').value;
+    var virtualPagesize = Math.log2(virtualIndex/physicalAddress);
+    var physicalPagesize = Math.log2(virtualIndex/(2*physicalAddress));
     var type = '';
 
     // Get the value of the checkbox for calculating physical address
@@ -46,8 +48,8 @@ function calculateAddress() {
 
     tableRows.forEach(function(row) {
         var rowIndex = row.querySelector('th').value;
-        var presentBit = row.querySelector('td:nth-child(2) input').value;
-        var physicalAddress = row.querySelector('td:nth-child(3) input').value;
+        var presentBit = row.querySelector('td:nth-child(3) input').value;
+        var physicalAddress = row.querySelector('td:nth-child(2) input').value;
 
         tableData.push({
             rowIndex: rowIndex,
@@ -74,14 +76,14 @@ function calculateAddress() {
     var resultingAddress = "";
 
     if(type === "virtualToPhysical"){
-        var physicalValue =virtualToPhysical(binaryInput,tableData)
+        var physicalValue =virtualToPhysical(binaryInput,tableData,virtualPagesize)
         console.log(physicalValue);
         resultingAddress = binaryToHex(physicalValue);
         console.log(resultingAddress);
 
 
     }else if(type === "physicalToVirtual"){
-        var virtualValue =physicalToVirtual(binaryInput,tableData)
+        var virtualValue =physicalToVirtual(binaryInput,tableData,physicalPagesize)
         console.log(virtualValue);
         resultingAddress = binaryToHex(virtualValue);
         console.log(resultingAddress);
@@ -145,38 +147,40 @@ function binaryToHex(binaryValue) {
 
 
 
-function virtualToPhysical(binaryInput, tableData) {
+function virtualToPhysical(binaryInput, tableData, virtualPagesize) {
     // Extract the first 4 bits from the binary result
-    const virtualIndex = parseInt(binaryInput.substring(0, 4), 2);
+    const virtualIndex = parseInt(binaryInput.substring(0, virtualPagesize), 2);
     console.log(virtualIndex);
     console.log(tableData[virtualIndex].rowIndex);
     console.log(tableData[virtualIndex].presentBit);
             if (tableData[virtualIndex].presentBit === '1') {
-                return tableData[virtualIndex].physicalAddress + binaryInput.substring(4);
+                return tableData[virtualIndex].physicalAddress + binaryInput.substring(virtualPagesize);
                 
             }
         
     return "Address translation failed: Virtual index not found.";
 }
 
-function physicalToVirtual(binaryInput, tableData) {
+function physicalToVirtual(binaryInput, tableData,physicalPagesize) {
     // Check if first bit is 1 (invalid physical address)
     if (binaryInput.charAt(0) === '1') {
         return "Invalid physical address.";
     }
 
     // Extract bits 2, 3, and 4 from the binary result
-    const physicalIndex = binaryInput.substring(1, 4);
-
+    const physicalIndex = binaryInput.substring(1, physicalPagesize+1);
+    console.log(physicalIndex);
+    console.log(physicalPagesize);
     // Search for the physical index in the table data
     for (let i = 0; i < tableData.length; i++) {
         if (tableData[i].physicalAddress === physicalIndex) {
             // Convert virtual index to 4-bit binary
             console.log(i);
-            const virtualIndexBinary = ("0000" + i.toString(2)).slice(-4);
+            const virtualIndexBinary = ("0000" + i.toString(2)).slice(-physicalPagesize-1);
+            console.log(virtualIndexBinary);
 
             // Attach virtual index to the binary result and remove the first 4 bits
-            return virtualIndexBinary + binaryInput.substring(4);
+            return virtualIndexBinary + binaryInput.substring(physicalPagesize+1);
         }
     }
     return "Address translation failed: Physical index not found.";
@@ -200,7 +204,6 @@ function generateAddressTable() {
         // Virtual Index cell
         var virtualIndexCell = document.createElement("th");
         virtualIndexCell.setAttribute("scope", "row");
-        virtualIndexCell.setAttribute("type", "text");
         virtualIndexCell.textContent = i;
         newRow.appendChild(virtualIndexCell);
 

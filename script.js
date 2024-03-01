@@ -2,7 +2,7 @@
 function calculateAddress() {
     // Collect data from input fields above the table
     var virtualIndex = document.getElementById('virtualIndexInput').value;
-  //  var addressType = document.getElementById('addressTypeDropdown').value;
+   // var addressType = document.getElementById('addressTypeDropdown').value;
     var physicalAddress = document.getElementById('physicalAddressInput').value;
     var virtualPagesize = Math.log2(virtualIndex/physicalAddress);
     var physicalPagesize = Math.log2(virtualIndex/(2*physicalAddress));
@@ -90,11 +90,20 @@ function calculateAddress() {
 
     }
 
-    document.getElementById('resultingAddressLabel').innerText = resultingAddress;
+    
     if(resultingAddress.length > 10){
+        document.getElementById('resultingAddressLabel').innerText = resultingAddress;
         resultContainer.classList.add('show-red');
     }
     else{
+        if(type === "virtualToPhysical"){
+            document.getElementById('resultingAddressLabel').innerText = "Physical Address is: " + resultingAddress;
+        }
+        else if(type === "physicalToVirtual"){
+            document.getElementById('resultingAddressLabel').innerText = "Virtual Address is: " + resultingAddress;
+        }
+
+        
         resultContainer.classList.add('show-green');
     }
     

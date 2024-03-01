@@ -8,7 +8,21 @@ body {
   font-family: 'Nunito', sans-serif;
   color: #384047;
   /* background-color: #cce6f9; */
-  margin: 10rem;
+  margin: 5rem;
+}
+
+header {
+  background-color: #5fa4d2; /* Choose your preferred background color */
+  color: #000000; /* Choose your preferred text color */
+  text-align: center;
+  padding: 10px 0; /* Adjust padding as needed */
+  margin: 5rem;
+  border-radius: 8px;
+}
+
+header h1 {
+  margin: 0rem;
+  font-size: 2.5em; /* Adjust font size as needed */
 }
 
 .topSelectors{

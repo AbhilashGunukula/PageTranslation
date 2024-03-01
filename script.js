@@ -353,3 +353,27 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 document.getElementById("virtualIndexInput").addEventListener("input", generateAddressTable);
 document.getElementById("physicalAddressInput").addEventListener("input", generateAddressTable);
+
+document.getElementById('virtualIndexInput').addEventListener('input', function() {
+    const virtualSpace = parseInt(this.value);
+    const isValidInput = !isNaN(virtualSpace) && virtualSpace !== 0; // Check if input is not NaN and not 0
+    const isPowerOfTwo = isValidInput && (virtualSpace & (virtualSpace - 1)) === 0; // Check if virtualSpace is a power of 2
+    
+    // Show/hide the "Page Size" label and input based on whether "Virtual Space" is a valid power of 2
+    const pageSizeContainer = document.getElementById('pageSizeContainer');
+    if (isPowerOfTwo) {
+        pageSizeContainer.style.display = 'block';
+    } else {
+        pageSizeContainer.style.display = 'none';
+    }
+});
+
+
+
+document.getElementById('physicalAddressInput').addEventListener('input', function() {
+    const pageSize = parseInt(this.value);
+    const isPowerOfTwo = (pageSize & (pageSize - 1)) === 0 && pageSize !== 0; // Check if pageSize is a power of 2
+    
+    // Show/hide the table based on whether "Page Size" is a valid power of 2
+    document.querySelector('table').style.display = isPowerOfTwo ? 'table' : 'none';
+});

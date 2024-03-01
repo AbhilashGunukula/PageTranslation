@@ -74,21 +74,27 @@ function calculateAddress() {
     var binaryInput = hexToBinary(addressInputVal);
     console.log(binaryInput);
     var resultingAddress = "";
+    if(binaryInput !="Invalid hexadecimal input!"){
 
     if(type === "virtualToPhysical"){
-        var physicalValue =virtualToPhysical(binaryInput,tableData,virtualPagesize)
+       /* var physicalValue =virtualToPhysical(binaryInput,tableData,virtualPagesize)
         console.log(physicalValue);
         resultingAddress = binaryToHex(physicalValue);
-        console.log(resultingAddress);
+        console.log(resultingAddress); */
+        resultingAddress = virtualToPhysical(binaryInput,tableData,virtualPagesize)
 
 
     }else if(type === "physicalToVirtual"){
-        var virtualValue =physicalToVirtual(binaryInput,tableData,physicalPagesize)
+       /* var virtualValue =physicalToVirtual(binaryInput,tableData,physicalPagesize)
         console.log(virtualValue);
         resultingAddress = binaryToHex(virtualValue);
-        console.log(resultingAddress);
+        console.log(resultingAddress);*/
+        resultingAddress = physicalToVirtual(binaryInput,tableData,physicalPagesize)
 
     }
+}else{
+    resultingAddress = "Invalid hexadecimal input!";
+}
 
     
     if(resultingAddress.length > 10){
@@ -167,12 +173,16 @@ function virtualToPhysical(binaryInput, tableData, virtualPagesize) {
     // Extract the first 4 bits from the binary result
     const virtualIndex = parseInt(binaryInput.substring(0, virtualPagesize), 2);
     console.log(virtualIndex);
-    console.log(tableData[virtualIndex].rowIndex);
-    console.log(tableData[virtualIndex].presentBit);
+    //console.log(tableData[virtualIndex].rowIndex);
+    //console.log(tableData[virtualIndex].presentBit);
+    if(virtualIndex != 'NaN' && virtualIndex<tableData.length){
             if (tableData[virtualIndex].presentBit === '1') {
-                return tableData[virtualIndex].physicalAddress + binaryInput.substring(virtualPagesize);
+                return binaryToHex(tableData[virtualIndex].physicalAddress + binaryInput.substring(virtualPagesize));
                 
+            }else{
+                return "Address translation failed: Virtual index is absent in page table.";
             }
+        }
         
     return "Address translation failed: Virtual index not found.";
 }
@@ -196,7 +206,7 @@ function physicalToVirtual(binaryInput, tableData,physicalPagesize) {
             console.log(virtualIndexBinary);
 
             // Attach virtual index to the binary result and remove the first 4 bits
-            return virtualIndexBinary + binaryInput.substring(physicalPagesize+1);
+            return binaryToHex(virtualIndexBinary + binaryInput.substring(physicalPagesize+1));
         }
     }
     return "Address translation failed: Physical index not found.";

@@ -66,21 +66,27 @@ function calculateAddress() {
 }
 
     
-    if(resultingAddress.length > 10){
-        document.getElementById('resultingAddressLabel').innerText = resultingAddress;
+    if(resultingAddress[1].length > 10){
+        document.getElementById('resultingBinaryAddressLabel').innerText = resultingAddress[0];
+        document.getElementById('resultingAddressLabel').innerText = resultingAddress[1];
         resultContainer.classList.add('show-red');
     }
     else{
+        resultContainer.classList.remove('show-red');
         if(type === "virtualToPhysical"){
-           document.getElementById('resultingBinaryAddressLabel').innerText = "Binary Value of Physical Address is: " + resultingAddress[0];
+            document.getElementById('resultingBinaryAddressLabel').innerText = "Binary Value of Physical Address is: " + resultingAddress[0];
             document.getElementById('resultingAddressLabel').innerText = "Hexa decimal value of Physical Address is: " + resultingAddress[1];
+           // resultContainer.classList.add('show-green');
         }
         else if(type === "physicalToVirtual"){
             document.getElementById('resultingBinaryAddressLabel').innerText = "Binary Value of Virtual Address is: " + resultingAddress[0];
             document.getElementById('resultingAddressLabel').innerText = "Hexa decimal value of Virtual Address is: " + resultingAddress[1];
+           // resultContainer.classList.add('show-green');
         }
 
         resultContainer.classList.add('show-green');
+
+        
     }
     
 }
@@ -144,7 +150,10 @@ function virtualToPhysical(binaryInput, tableData, virtualPagesize) {
                 return binaryToHex(tableData[virtualIndex].physicalAddress + binaryInput.substring(virtualPagesize));
                 
             }else{
-                return "Address translation failed: Virtual index is absent in page table.";
+                let result=[];
+                result.push("Invalid or binary value for page is not present in page table");
+                result.push("Address translation failed: Virtual index is absent in page table.");
+                return result;
             }
         }
         

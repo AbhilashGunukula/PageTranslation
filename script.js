@@ -66,7 +66,7 @@ function calculateAddress() {
 }
 
     
-    if(resultingAddress.length === 1){
+    if(resultingAddress.length > 10){
         document.getElementById('resultingAddressLabel').innerText = resultingAddress;
         resultContainer.classList.add('show-red');
     }

@@ -151,18 +151,25 @@ function virtualToPhysical(binaryInput, tableData, virtualPagesize) {
                 
             }else{
                 let result=[];
-                result.push("Invalid or binary value for page is not present in page table");
-                result.push("Address translation failed: Virtual index is absent in page table.");
+                result.push("Address translation failed:");
+                result.push("Virtual index is absent in page table.");
                 return result;
             }
         }
-        
-    return "Address translation failed: Virtual index not found.";
+
+    let result=[];
+    result.push("Address translation failed:");
+    result.push("Virtual index not found.");
+    return result;
+
 }
 
 function physicalToVirtual(binaryInput, tableData,physicalPagesize) {
     if (binaryInput.charAt(0) === '1') {
-        return "Invalid physical address.";
+        let result=[];
+        result.push("Invalid physical address.");
+        result.push("As the first bit is 1");
+        return result;
     }
 
     const physicalIndex = binaryInput.substring(1, physicalPagesize+1);
@@ -170,25 +177,34 @@ function physicalToVirtual(binaryInput, tableData,physicalPagesize) {
     console.log(physicalPagesize);
 
     for (let i = 0; i < tableData.length; i++) {
-        if (tableData[i].physicalAddress === physicalIndex) {
-            // Convert virtual index to 4-bit binary
+        if (tableData[i].physicalAddress === physicalIndex && tableData[i].presentBit === '1') {
+           
             console.log(i);
             const virtualIndexBinary = ("0000" + i.toString(2)).slice(-physicalPagesize-1);
             console.log(virtualIndexBinary);
 
-            // Attach virtual index to the binary result and remove the first 4 bits
+            
             return binaryToHex(virtualIndexBinary + binaryInput.substring(physicalPagesize+1));
         }
+        else if (tableData[i].physicalAddress === physicalIndex && tableData[i].presentBit === '0'){
+            let result=[];
+            result.push("physical index is present in table but present bit is 0");
+            result.push("Address translation failed: physical index is absent in page table.");
+            return result;
+        }
     }
-    return "Address translation failed: Physical index not found.";
+    let result=[];
+    result.push("Address translation failed:");
+    result.push("Physical index not found");
+    return result;
 }
 function generateAddressTable() {
-    // Get the values of virtualIndexInput and physicalAddressInput
+   
     var virtualIndexSize = parseInt(document.getElementById("virtualIndexInput").value);
     var pageSize = parseInt(document.getElementById("physicalAddressInput").value);
     var physicalAddressMaxLength = Math.log2(virtualIndexSize / (2 * pageSize));
 
-    // Reference to the table body
+  
     var tableBody = document.querySelector("tbody");
     var tcaption = document.getElementById("caption");
     var theading = document.getElementById("attributes");

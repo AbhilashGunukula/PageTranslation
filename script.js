@@ -61,18 +61,16 @@ function calculateAddress() {
         resultingAddress = physicalToVirtual(binaryInput,tableData,physicalPagesize)
 
     }
-}else{
-    resultingAddress = "Invalid hexadecimal input!";
-}
 
-    
-    if(resultingAddress[1].length > 10){
+    if((resultingAddress[1].includes("Invalid") || resultingAddress[1].includes("Virtual index") || resultingAddress[1].includes("physical index")||resultingAddress[1].includes("As the first bit") )){
         document.getElementById('resultingBinaryAddressLabel').innerText = resultingAddress[0];
         document.getElementById('resultingAddressLabel').innerText = resultingAddress[1];
+        resultContainer.classList.remove('show-green');
         resultContainer.classList.add('show-red');
     }
     else{
         resultContainer.classList.remove('show-red');
+
         if(type === "virtualToPhysical"){
             document.getElementById('resultingBinaryAddressLabel').innerText = "Binary Value of Physical Address is: " + resultingAddress[0];
             document.getElementById('resultingAddressLabel').innerText = "Hexa decimal value of Physical Address is: " + resultingAddress[1];
@@ -88,6 +86,48 @@ function calculateAddress() {
 
         
     }
+    
+}
+else{
+    /*let resultingAddress=[];
+    resultingAddress.push(addressInputVal);
+    resultingAddress.push("Invalid hexadecimal input!");
+    console.log("Invalid hexadecimal input!");
+    console.log(resultingAddress[1].length);
+    console.log(typeof resultingAddress[1]);*/
+
+    document.getElementById('resultingBinaryAddressLabel').innerText = "Invalid Hexa decimal input";
+    document.getElementById('resultingAddressLabel').innerText = "cant be translated";
+    resultContainer.classList.remove('show-green');
+    resultContainer.classList.add('show-red');
+    
+}
+
+    
+   /* if(resultingAddress[1] && (resultingAddress[1].includes("Invalid") || resultingAddress[1].includes("Virtual index") || resultingAddress[1].includes("physical index")||resultingAddress[1].includes("As the first bit") )){
+        document.getElementById('resultingBinaryAddressLabel').innerText = resultingAddress[0];
+        document.getElementById('resultingAddressLabel').innerText = resultingAddress[1];
+        resultContainer.classList.remove('show-green');
+        resultContainer.classList.add('show-red');
+    }
+    else{
+        resultContainer.classList.remove('show-red');
+
+        if(type === "virtualToPhysical"){
+            document.getElementById('resultingBinaryAddressLabel').innerText = "Binary Value of Physical Address is: " + resultingAddress[0];
+            document.getElementById('resultingAddressLabel').innerText = "Hexa decimal value of Physical Address is: " + resultingAddress[1];
+           // resultContainer.classList.add('show-green');
+        }
+        else if(type === "physicalToVirtual"){
+            document.getElementById('resultingBinaryAddressLabel').innerText = "Binary Value of Virtual Address is: " + resultingAddress[0];
+            document.getElementById('resultingAddressLabel').innerText = "Hexa decimal value of Virtual Address is: " + resultingAddress[1];
+           // resultContainer.classList.add('show-green');
+        }
+
+        resultContainer.classList.add('show-green');
+
+        
+    }*/
     
 }
 function hexToBinary(hexValue) {
@@ -195,7 +235,7 @@ function physicalToVirtual(binaryInput, tableData,physicalPagesize) {
     }
     let result=[];
     result.push("Address translation failed:");
-    result.push("Physical index not found");
+    result.push("physical index not found");
     return result;
 }
 function generateAddressTable() {
@@ -209,7 +249,6 @@ function generateAddressTable() {
     var tcaption = document.getElementById("caption");
     var theading = document.getElementById("attributes");
 
-    // Clear existing rows
     tableBody.innerHTML = "";
     tcaption.classList.add('d-none');
     theading.classList.add('d-none');
@@ -221,20 +260,17 @@ function generateAddressTable() {
 
     var generatedNumbers = generatePermutations(physicalAddressMaxLength);
     console.log(generatedNumbers);
-    //var generatedAddresses = new Set();
+    
     var usedIndices = new Set();
 
-    // Generate new rows based on input values
     for (var i = 0; i < virtualIndexSize / pageSize; i++) {
         var newRow = document.createElement("tr");
 
-        // Virtual Index cell
         var virtualIndexCell = document.createElement("th");
         virtualIndexCell.setAttribute("scope", "row");
         virtualIndexCell.textContent = i;
         newRow.appendChild(virtualIndexCell);
 
-        // Physical Address cell
         var physicalAddressCell = document.createElement("td");
         var physicalAddressValue = document.createElement("input");
         physicalAddressValue.setAttribute("type", "text");
@@ -254,8 +290,6 @@ function generateAddressTable() {
         physicalAddressCell.appendChild(physicalAddressValue);
         newRow.appendChild(physicalAddressCell);
         
-
-        // Present Bit cell
         var presentBitCell = document.createElement("td");
         var presentBitInput = document.createElement("input");
         presentBitInput.setAttribute("type", "text");
@@ -269,7 +303,6 @@ function generateAddressTable() {
         presentBitCell.appendChild(presentBitInput);
         newRow.appendChild(presentBitCell);
 
-        // Append the row to the table body
         tableBody.appendChild(newRow);
     }
 }
@@ -285,16 +318,16 @@ function toggleAddressInput(addressType) {
     var virtualAddressInputBox = document.getElementById("virtualAddressInputBox");
     var physicalAddressInputBox = document.getElementById("physicalAddressInputBox");
 
-    // Check if the physical checkbox is checked and toggle input boxes accordingly
+    
     if (addressType === "physical") {
         if (physicalCheckbox.checked) {
             if (!virtualCheckbox.checked && !virtualAddressInputBox) {
-                // Create input box and label for virtual address
+               
                 virtualAddressInputBox = document.createElement("div");
                 virtualAddressInputBox.id = "virtualAddressInputBox";
                 virtualAddressInputBox.innerHTML = '<label for="virtualAddressInput">Enter Virtual Address:</label><input type="text" id="virtualAddressInput">';
                 
-                // Append input box to the container
+                
                 document.getElementById("physical").appendChild(virtualAddressInputBox);
             }
             if (physicalAddressInputBox) {
@@ -305,18 +338,16 @@ function toggleAddressInput(addressType) {
                 virtualAddressInputBox.parentNode.removeChild(virtualAddressInputBox);
             }
         }
-        virtualCheckbox.checked = false; // Uncheck the virtual checkbox
+        virtualCheckbox.checked = false; 
     } 
-    // Check if the virtual checkbox is checked and toggle input boxes accordingly
+
     else if (addressType === "virtual") {
         if (virtualCheckbox.checked) {
             if (!physicalCheckbox.checked && !physicalAddressInputBox) {
-                // Create input box and label for physical address
                 physicalAddressInputBox = document.createElement("div");
                 physicalAddressInputBox.id = "physicalAddressInputBox";
                 physicalAddressInputBox.innerHTML = '<label for="physicalAddressInputs">Enter Physical Address:</label><input type="text" id="physicalAddressInputs">';
                 
-                // Append input box to the container
                 document.getElementById("virtual").appendChild(physicalAddressInputBox);
             }
             if (virtualAddressInputBox) {
@@ -327,7 +358,7 @@ function toggleAddressInput(addressType) {
                 physicalAddressInputBox.parentNode.removeChild(physicalAddressInputBox);
             }
         }
-        physicalCheckbox.checked = false; // Uncheck the physical checkbox
+        physicalCheckbox.checked = false; 
     }
 }
 

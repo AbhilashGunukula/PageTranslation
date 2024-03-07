@@ -3,6 +3,8 @@ function calculateAddress() {
     var virtualIndex = document.getElementById('virtualIndexInput').value;
   
     var physicalAddress = document.getElementById('physicalAddressInput').value;
+    var physicalAddressSize = Math.log2(virtualIndex/2) + 10;
+    var VirtualAddressSize = Math.log2(virtualIndex) + 10;
     var virtualPagesize = Math.log2(virtualIndex/physicalAddress);
     var physicalPagesize = Math.log2(virtualIndex/(2*physicalAddress));
     var type = '';
@@ -54,11 +56,11 @@ function calculateAddress() {
     if(binaryInput !="Invalid hexadecimal input!"){
 
     if(type === "virtualToPhysical"){
-        resultingAddress = virtualToPhysical(binaryInput,tableData,virtualPagesize)
+        resultingAddress = virtualToPhysical(binaryInput,tableData,virtualPagesize,VirtualAddressSize)
 
 
     }else if(type === "physicalToVirtual"){
-        resultingAddress = physicalToVirtual(binaryInput,tableData,physicalPagesize)
+        resultingAddress = physicalToVirtual(binaryInput,tableData,physicalPagesize,physicalAddressSize)
 
     }
 
@@ -182,12 +184,13 @@ function binaryToHex(binaryValue) {
 
 
 
-function virtualToPhysical(binaryInput, tableData, virtualPagesize) {
-    const virtualIndex = parseInt(binaryInput.substring(0, virtualPagesize), 2);
-    console.log(virtualIndex);
+function virtualToPhysical(binaryInput, tableData, virtualPagesize,addressSize) {
+    var binaryString = binaryInput.substring(binaryInput.length - addressSize)
+    const virtualIndex = parseInt(binaryString.substring(0, virtualPagesize), 2);
+    console.log(virtualIndex+"here");
     if(virtualIndex != 'NaN' && virtualIndex<tableData.length){
             if (tableData[virtualIndex].presentBit === '1') {
-                return binaryToHex(tableData[virtualIndex].physicalAddress + binaryInput.substring(virtualPagesize));
+                return binaryToHex(tableData[virtualIndex].physicalAddress + binaryString.substring(virtualPagesize));
                 
             }else{
                 let result=[];
@@ -204,15 +207,19 @@ function virtualToPhysical(binaryInput, tableData, virtualPagesize) {
 
 }
 
-function physicalToVirtual(binaryInput, tableData,physicalPagesize) {
-    if (binaryInput.charAt(0) === '1') {
+function physicalToVirtual(binaryInput, tableData,physicalPagesize,VirtualAddressSize) {
+    var checkBit = binaryInput.substring(0, (binaryInput.length - VirtualAddressSize))
+    console.log("length"+checkBit.length)
+   // var binaryString = binaryInput.substring(binaryInput.length - VirtualAddressSize)
+    if (checkBit.includes("1") ) {
         let result=[];
         result.push("Invalid physical address.");
         result.push("As the first bit is 1");
         return result;
     }
+    var binaryString = binaryInput.substring(binaryInput.length - VirtualAddressSize)
 
-    const physicalIndex = binaryInput.substring(1, physicalPagesize+1);
+    const physicalIndex = binaryString.substring(0, physicalPagesize);
     console.log(physicalIndex);
     console.log(physicalPagesize);
 
@@ -220,11 +227,11 @@ function physicalToVirtual(binaryInput, tableData,physicalPagesize) {
         if (tableData[i].physicalAddress === physicalIndex && tableData[i].presentBit === '1') {
            
             console.log(i);
-            const virtualIndexBinary = ("0000" + i.toString(2)).slice(-physicalPagesize-1);
+            const virtualIndexBinary = ("0000" + i.toString(2)).slice(-physicalPagesize);
             console.log(virtualIndexBinary);
 
             
-            return binaryToHex(virtualIndexBinary + binaryInput.substring(physicalPagesize+1));
+            return binaryToHex(virtualIndexBinary + binaryString.substring(physicalPagesize));
         }
         else if (tableData[i].physicalAddress === physicalIndex && tableData[i].presentBit === '0'){
             let result=[];
@@ -298,7 +305,9 @@ function generateAddressTable() {
         presentBitInput.setAttribute("maxlength", "1");
 
         if(physicalAddressValue.value !== ''){
-            presentBitInput.value = Math.random() < 0.6 ? 1 : 0;
+            presentBitInput.value = 1;
+        }else{
+            presentBitInput.value = 0;
         }
         presentBitCell.appendChild(presentBitInput);
         newRow.appendChild(presentBitCell);

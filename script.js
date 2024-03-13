@@ -87,6 +87,10 @@ function calculateAddress() {
             document.getElementById('InputBinaryAddressLabel').innerText = "Binary Value of given virtual Address is: " + inputBinaryValue;
             popupContent.textContent = "Physical index is absent/ present bit is O. virtual address cannot be translated";
 
+        }else if(type === "virtualToPhysical" && resultingAddress[1]==="As the first bit is 1"){
+            document.getElementById('InputBinaryAddressLabel').innerText = "Binary Value of given Virtual Address is: " + inputBinaryValue;
+            popupContent.textContent = "Since ignore bit is 1! address cannot be translated";
+
         }else if(type === "virtualToPhysical" ){
             document.getElementById('InputBinaryAddressLabel').innerText = "Binary Value of given virtual Address is: " + inputBinaryValue;
             popupContent.textContent = "Invalid virtual address. virtual address cannot be translated";
@@ -215,9 +219,20 @@ function binaryToHex(binaryValue) {
 
 
 function virtualToPhysical(binaryInput, tableData, virtualPagesize,addressSize) {
-    var binaryString = binaryInput.substring(binaryInput.length - addressSize)
+    var ignoreBits = binaryInput.substring(0,binaryInput.length - addressSize);
+    console.log(ignoreBits+" ignoreBits");
+    if (ignoreBits.includes("1") ) {
+        let result=[];
+        result.push("Invalid physical address.");
+        result.push("As the first bit is 1");
+        return result;
+    }
+    var binaryString = binaryInput.substring(binaryInput.length - addressSize);
     const virtualIndex = parseInt(binaryString.substring(0, virtualPagesize), 2);
-    console.log(virtualIndex+"here");
+    console.log(addressSize+" addressSize");
+    console.log(virtualIndex+" virtualIndex");
+    console.log(virtualPagesize+" virtualPagesize");
+    console.log(binaryString+" binaryString");
     if(virtualIndex != 'NaN' && virtualIndex<tableData.length){
             if (tableData[virtualIndex].presentBit === '1') {
                 return binaryToHex(tableData[virtualIndex].physicalAddress + binaryString.substring(virtualPagesize));
